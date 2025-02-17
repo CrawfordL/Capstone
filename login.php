@@ -1,5 +1,4 @@
 <?php
-// login.php - Login Page
 ?>
 <!DOCTYPE html>
 <html lang="en">

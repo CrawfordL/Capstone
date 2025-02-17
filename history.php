@@ -1,5 +1,4 @@
 <?php
-// history.php - Placeholder for Past Conversations
 ?>
 <!DOCTYPE html>
 <html lang="en">
