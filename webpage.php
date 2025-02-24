@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header("Location: index.php");
+    header("Location: login.php");
     exit();
 }
 ?>
@@ -18,20 +18,17 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 <body>
     <h1>Welcome to the Chatbot</h1>
 
-    <!-- Chat window -->
     <div id="chat" style="max-height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"></div>
 
-    <!-- Input for the user to type messages -->
     <input type="text" id="userInput" placeholder="Type a message..." autocomplete="off">
     <button onclick="sendMessage()">Send</button>
 
     <footer>
-        <!-- View Conversation History Button -->
+        <button onclick="saveConversation()">Save Conversation</button>
         <button onclick="window.location.href='history.php'">View Conversation History</button>
     </footer>
 
     <script>
-        // Listen for Enter keypress to send message
         document.getElementById("userInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 sendMessage();
@@ -39,16 +36,14 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
         });
 
         function sendMessage() {
-            let userInputField = document.getElementById("userInput");
-            let userInput = userInputField.value.trim();
-            let chatDiv = document.getElementById("chat");
+            const userInputField = document.getElementById("userInput");
+            const userInput = userInputField.value.trim();
+            const chatDiv = document.getElementById("chat");
 
             if (userInput === "") return;
 
-            // Show user's message
             chatDiv.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
 
-            // Send message to Flask backend
             fetch("http://localhost:5000/chat", {
                     method: "POST",
                     headers: {
@@ -60,7 +55,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    let aiReply = data.reply || "Sorry, I didn't get that.";
+                    const aiReply = data.reply || "Sorry, I didn't get that.";
                     chatDiv.innerHTML += `<p><strong>AI:</strong> ${aiReply}</p>`;
                     chatDiv.scrollTop = chatDiv.scrollHeight;
                 })
@@ -71,6 +66,33 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                 });
 
             userInputField.value = "";
+        }
+
+        function saveConversation() {
+            const chatDiv = document.getElementById("chat");
+            const messages = Array.from(chatDiv.querySelectorAll("p")).map(p => p.textContent);
+
+            fetch("http://localhost:5000/save_conversation", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        conversation: messages
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message);
+                    } else if (data.error) {
+                        alert(`Error: ${data.error}`);
+                    }
+                })
+                .catch(error => {
+                    console.error("Fetch error:", error);
+                    alert("Failed to save conversation.");
+                });
         }
     </script>
 </body>

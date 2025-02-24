@@ -1,11 +1,29 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 from openai import OpenAI
+import sqlite3
+import json
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS to allow requests from your PHP frontend
+app.secret_key = 'super_secret_key'  
+CORS(app, supports_credentials=True)
+CORS(app)
 
-# OpenRouter AI API configuration
+def init_db():
+    conn = sqlite3.connect("chat_history.db")
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS conversations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            conversation_data TEXT
+        );
+    ''')
+    conn.commit()
+    conn.close()
+
+init_db()
+
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key="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",
@@ -14,22 +32,62 @@ client = OpenAI(
 @app.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json()
-    user_message = data.get("message", "")
-
+    user_message = data.get("message", "").strip()
+    
     if not user_message:
         return jsonify({"error": "No message provided"}), 400
+
+    if 'conversation' not in session:
+        session['conversation'] = []
 
     try:
         completion = client.chat.completions.create(
             model="qwen/qwen2.5-vl-72b-instruct:free",
-            messages=[{"role": "user", "content": user_message}]
+            messages=[{"role": "user", "content": msg["user"]} for msg in session['conversation']] + [{"role": "user", "content": user_message}]
         )
-
         ai_reply = completion.choices[0].message.content if completion.choices else "No response from AI."
+
+        session['conversation'].append({"user": user_message, "ai": ai_reply})
+        session.modified = True
+
         return jsonify({"reply": ai_reply})
 
     except Exception as e:
         return jsonify({"error": f"Failed to get AI response: {str(e)}"}), 500
+
+@app.route("/save_conversation", methods=["POST"])
+def save_conversation():
+    data = request.get_json()
+    conversation = data.get("conversation", [])
+
+    if not conversation:
+        return jsonify({"error": "No conversation to save."}), 400
+
+    try:
+        conn = sqlite3.connect("chat_history.db")
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO conversations (conversation_data) VALUES (?)",
+            (json.dumps(conversation),)
+        )
+        conn.commit()
+        return jsonify({"message": "Conversation saved successfully."})
+    except sqlite3.Error as e:
+        return jsonify({"error": f"Database error: {str(e)}"}), 500
+    finally:
+        if conn:
+            conn.close()
+
+@app.route("/history", methods=["GET"])
+def get_history():
+    conn = sqlite3.connect("chat_history.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT conversation_data FROM conversations ORDER BY timestamp DESC")
+    conversations = cursor.fetchall()
+    conn.close()
+
+    history = [json.loads(convo[0]) for convo in conversations]
+    return jsonify({"history": history})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

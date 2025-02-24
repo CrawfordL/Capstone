@@ -1,8 +1,7 @@
 <?php
-// authenticate.php - Authentication Logic
 session_start();
 
-// Hardcoded username and password
+
 $valid_username = "admin";
 $valid_password = "admin";
 
@@ -13,10 +12,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($username === $valid_username && $password === $valid_password) {
         $_SESSION["loggedin"] = true;
         $_SESSION["username"] = $username;
+        echo "Debug: Login successful. Session data: ";
+        print_r($_SESSION);
         header("Location: webpage.php");
         exit();
     } else {
-        echo "<script>alert('Invalid username or password'); window.location.href='login.php';</script>";
+        $_SESSION["error"] = "Invalid username or password";
+        echo "Debug: Login failed. Redirecting to login.php.<br>";
+        header("Location: login.php");
+        exit();
     }
 }
-?>
