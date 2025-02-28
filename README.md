@@ -1,5 +1,6 @@
 # Capstone
 Project Name: Chatbot
+
 Project Description
 The Chatbot project is a web-based application developed using PHP and SQLite that provides AI-powered responses to user queries. The chatbot is integrated with Gwen AI to deliver conversational AI capabilities. The project focuses on user interaction, conversation history storage, and security features such as input validation and rate limiting.
 
