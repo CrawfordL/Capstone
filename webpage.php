@@ -1,8 +1,29 @@
 <?php
 session_start();
+
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header("Location: login.php");
     exit();
+}
+
+$rateLimit = 15; 
+$rateLimitWindow = 60;
+
+if (!isset($_SESSION['request_count'])) {
+    $_SESSION['request_count'] = 0;
+    $_SESSION['first_request_time'] = time();
+}
+
+if (time() - $_SESSION['first_request_time'] > $rateLimitWindow) {
+    $_SESSION['request_count'] = 0;
+    $_SESSION['first_request_time'] = time();
+}
+
+$_SESSION['request_count'] += 1;
+
+if ($_SESSION['request_count'] > $rateLimit) {
+    http_response_code(429);
+    die("Rate limit exceeded. Please try again later.");
 }
 ?>
 <!DOCTYPE html>
@@ -42,7 +63,10 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
             if (userInput === "") return;
 
-            chatDiv.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
+            const userMessage = document.createElement("p");
+            userMessage.classList.add("message", "user-message");
+            userMessage.innerHTML = `<strong>You:</strong> ${userInput}`;
+            chatDiv.appendChild(userMessage);
 
             fetch("http://localhost:5000/chat", {
                     method: "POST",
@@ -53,15 +77,28 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                         message: userInput
                     })
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (response.status === 429) {
+                        throw new Error("Rate limit exceeded. Please try again later.");
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     const aiReply = data.reply || "Sorry, I didn't get that.";
-                    chatDiv.innerHTML += `<p><strong>AI:</strong> ${aiReply}</p>`;
+
+                    const aiMessage = document.createElement("p");
+                    aiMessage.classList.add("message", "ai-message");
+                    aiMessage.innerHTML = `<strong>AI:</strong> ${aiReply}`;
+                    chatDiv.appendChild(aiMessage);
+
                     chatDiv.scrollTop = chatDiv.scrollHeight;
                 })
                 .catch(error => {
                     console.error("Error:", error);
-                    chatDiv.innerHTML += `<p><strong>AI:</strong> Something went wrong. Please try again.</p>`;
+                    const errorMessage = document.createElement("p");
+                    errorMessage.classList.add("message", "ai-message");
+                    errorMessage.innerHTML = `<strong>AI:</strong> ${error.message}`;
+                    chatDiv.appendChild(errorMessage);
                     chatDiv.scrollTop = chatDiv.scrollHeight;
                 });
 

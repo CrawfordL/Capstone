@@ -3,11 +3,20 @@ from flask_cors import CORS
 from openai import OpenAI
 import sqlite3
 import json
+import re  
+from flask_limiter import Limiter  
+from flask_limiter.util import get_remote_address  
 
 app = Flask(__name__)
 app.secret_key = 'super_secret_key'  
 CORS(app, supports_credentials=True)
 CORS(app)
+
+limiter = Limiter(
+    app=app,
+    key_func=get_remote_address,  
+    default_limits=["15 per minute"]  
+)
 
 def init_db():
     conn = sqlite3.connect("chat_history.db")
@@ -29,13 +38,23 @@ client = OpenAI(
     api_key="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",
 )
 
+def sanitize_input(user_input):
+    """
+    Sanitizes user input to prevent XSS and injection attacks.
+    """
+    sanitized_input = re.sub(r"[^a-zA-Z0-9\s.,!?]", "", user_input)
+    return sanitized_input.strip()
+
 @app.route("/chat", methods=["POST"])
+@limiter.limit("15 per minute")
 def chat():
     data = request.get_json()
     user_message = data.get("message", "").strip()
     
     if not user_message:
         return jsonify({"error": "No message provided"}), 400
+
+    user_message = sanitize_input(user_message)
 
     if 'conversation' not in session:
         session['conversation'] = []
