@@ -35,7 +35,7 @@ init_db()
 
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key="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",
+    api_key="Add Your Own Key",
 )
 
 def sanitize_input(user_input):

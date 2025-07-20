@@ -11,16 +11,19 @@
 <body>
     <h1>Welcome to Chatbot</h1>
 
-    <div id="chat" style="max-height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"></div>
+    <div id="chat"></div>
 
-    <input type="text" id="userInput" placeholder="Type a message..." autocomplete="off">
-    <button onclick="sendMessage()">Send</button>
+    <div class="chat-controls">
+        <div class="input-row">
+            <input type="text" id="userInput" placeholder="Type a message..." autocomplete="off">
+            <button onclick="sendMessage()">Send</button>
+        </div>
 
-    <footer>
-        <button onclick="saveConversation()">Save Conversation</button>
-        <button onclick="window.location.href='history.php'">View Conversation History</button>
-    </footer>
-
+        <footer>
+            <button onclick="saveConversation()">Save Conversation</button>
+            <button onclick="window.location.href='history.php'">View Conversation History</button>
+        </footer>
+    </div>
     <script>
         document.getElementById("userInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
@@ -37,7 +40,7 @@
 
             const userMessage = document.createElement("p");
             userMessage.classList.add("message", "user-message");
-            userMessage.innerHTML = `<strong>You:</strong> ${userInput}`;
+            userMessage.innerHTML = userInput;
             chatDiv.appendChild(userMessage);
 
             fetch("http://localhost:5000/chat", {
@@ -60,7 +63,7 @@
 
                     const aiMessage = document.createElement("p");
                     aiMessage.classList.add("message", "ai-message");
-                    aiMessage.innerHTML = `<strong>AI:</strong> ${aiReply}`;
+                    aiMessage.innerHTML = aiReply;
                     chatDiv.appendChild(aiMessage);
 
                     chatDiv.scrollTop = chatDiv.scrollHeight;
