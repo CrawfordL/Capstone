@@ -2,7 +2,7 @@
 Project Name: Chatbot
 
 Project Description
-The Chatbot project is a web-based application developed using PHP and SQLite that provides AI-powered responses to user queries. The chatbot is integrated with Gwen AI to deliver conversational AI capabilities. The project focuses on user interaction, conversation history storage, and security features such as input validation and rate limiting.
+The Chatbot project is a web-based application developed using PHP and SQLite that provides AI-powered responses to user queries. The chatbot is integrated with Quen 3 AI to deliver conversational AI capabilities. The project focuses on user interaction, conversation history storage, and security features such as input validation and rate limiting.
 
 Project Tasks
 
@@ -16,7 +16,7 @@ Create a simple UI with a text input field for user interaction
 Implement real-time chat display functionality
 
 Task 3: Integrate the AI Model
-Connect the chatbot to Gwen AI
+Connect the chatbot to Quen 3 AI
 Ensure user messages are sent to the AI model and responses are displayed
 
 Task 4: Implement conversation history
@@ -43,7 +43,7 @@ Project Skills Learned
 Frontend Development: HTML, CSS, JavaScript for chatbot UI
 Backend Development: PHP for handling user authentication and API calls
 Database Management: SQLite for storing conversation history
-AI Integration: Using Gwen AI to handle user queries
+AI Integration: Using Quen 3 AI to handle user queries
 Security Features: Input validation and rate limiting
 Server Management: Running Flask and PHP servers simultaneously
 Testing & Debugging: Identifying and fixing API/database issues
@@ -53,14 +53,14 @@ HTML, CSS, JavaScript – Frontend development
 PHP – Backend logic and webpage handling
 SQLite – Database for storing conversation history
 Flask (Python) – AI integration and API handling
-Gwen AI – AI model for chatbot responses
+Quen 3 AI – AI model for chatbot responses
 
 Development Process Used
 Agile Methodology: The project was developed iteratively, adding new features and improvements each week based on testing and feedback.
 
 Project Challenges & Improvements
 What went well?
-Successfully integrated Gwen AI with PHP and Flask
+Successfully integrated Quen 3 AI with PHP and Flask
 Implemented conversation history storage in SQLite
 Added basic security measures like input validation and rate limiting
 Styled the chatbot for a better user experience
