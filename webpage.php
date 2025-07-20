@@ -1,31 +1,3 @@
-<?php
-session_start();
-
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header("Location: login.php");
-    exit();
-}
-
-$rateLimit = 15; 
-$rateLimitWindow = 60;
-
-if (!isset($_SESSION['request_count'])) {
-    $_SESSION['request_count'] = 0;
-    $_SESSION['first_request_time'] = time();
-}
-
-if (time() - $_SESSION['first_request_time'] > $rateLimitWindow) {
-    $_SESSION['request_count'] = 0;
-    $_SESSION['first_request_time'] = time();
-}
-
-$_SESSION['request_count'] += 1;
-
-if ($_SESSION['request_count'] > $rateLimit) {
-    http_response_code(429);
-    die("Rate limit exceeded. Please try again later.");
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -37,7 +9,7 @@ if ($_SESSION['request_count'] > $rateLimit) {
 </head>
 
 <body>
-    <h1>Welcome to the Chatbot</h1>
+    <h1>Welcome to Chatbot</h1>
 
     <div id="chat" style="max-height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"></div>
 
