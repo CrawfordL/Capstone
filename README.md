@@ -80,10 +80,6 @@ Start the PHP server:
 php -S localhost:8000
 Start the Flask AI backend:
 python ai.py
-Login credentials
-Username: admin
-Password: admin
-Dependencies Required:
 
 Python libraries: Flask, requests, flask_cors, sqlite3
 PHP installed on the system
