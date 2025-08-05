@@ -1,113 +1,113 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #121212;
-    color: #fff;
-    text-align: center;
-    margin: 0;
-    padding: 0;
+    font-family: Arial, sans-serif;  /* Use Arial font, or similar if Arial isn't available */
+    background-color: #121212;       /* Dark gray background color */
+    color: #fff;                     /* White text color */
+    text-align: center;              /* Center all text on the page */
+    margin: 0;                       /* Remove default spacing around the edges */
+    padding: 0;                      /* Remove default padding inside the edges */
 }
 
 h1 {
-    margin-top: 20px;
-    font-size: 24px;
+    margin-top: 20px;               /* Add 20 pixels of space above the heading */
+    font-size: 24px;                /* Make the heading text 24 pixels tall */
 }
 
 .chat-controls {
-    margin-top: 90px; /* Push it further down */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
+    margin-top: 90px;               /* Push this section 90 pixels down from the top */
+    display: flex;                  /* Use flexible layout */
+    flex-direction: column;         /* Stack items vertically (top to bottom) */
+    align-items: center;            /* Center items horizontally */
+    gap: 2px;                       /* Add 2 pixels of space between items */
 }
 
 .input-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
+    display: flex;                  /* Use flexible layout */
+    align-items: center;            /* Center items vertically in the row */
+    justify-content: center;        /* Center the row horizontally */
+    gap: 10px;                      /* Add 10 pixels of space between items */
+    width: 100%;                    /* Take up the full width available */
 }
 
 #userInput {
-    width: 40%;           
-    padding: 8px 10px;    
-    font-size: 14px;      
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-top: 10px;
-    box-sizing: border-box;
+    width: 40%;                     /* Make the input box 40% of the container width */
+    padding: 8px 10px;              /* Add space inside: 8px top/bottom, 10px left/right */
+    font-size: 14px;                /* Make the text 14 pixels tall */
+    border: 1px solid #ccc;         /* Add a thin light gray border */
+    border-radius: 5px;             /* Round the corners by 5 pixels */
+    margin-top: 10px;               /* Add 10 pixels of space above */
+    box-sizing: border-box;         /* Include padding and border in the width calculation */
 }
 
 #chat {
-    width: 80%;
-    max-width: 550px;
-    height: 500px;
-    margin: 20px auto;
-    padding: 10px;
-    border-radius: 10px;
-    background-color: #1e1e1e;
-    border: 1px solid #ccc;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #555 #1e1e1e;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+    width: 80%;                     /* Make it 80% of the screen width */
+    max-width: 550px;               /* But never wider than 550 pixels */
+    height: 500px;                  /* Make it 500 pixels tall */
+    margin: 20px auto;              /* Center it with 20px space above and below */
+    padding: 10px;                  /* Add 10 pixels of space inside the edges */
+    border-radius: 10px;            /* Round the corners by 10 pixels */
+    background-color: #1e1e1e;      /* Dark gray background */
+    border: 1px solid #ccc;         /* Light gray border */
+    overflow-y: auto;               /* Add a scroll bar if content is too tall */
+    scrollbar-width: thin;          /* Make the scrollbar narrow */
+    scrollbar-color: #555 #1e1e1e;  /* Dark scrollbar on dark background */
+    display: flex;                  /* Use flexible layout */
+    flex-direction: column;         /* Stack messages vertically */
+    gap: 5px;                       /* Add 5 pixels of space between messages */
 }
 
 .message {
-    padding: 10px;
-    margin: 5px;
-    border-radius: 5px;
-    max-width: 75%;
-    word-wrap: break-word;
-    display: inline-block;
+    padding: 10px;                  /* Add 10 pixels of space inside each message */
+    margin: 5px;                    /* Add 5 pixels of space around each message */
+    border-radius: 5px;             /* Round the corners by 5 pixels */
+    max-width: 75%;                 /* Messages can't be wider than 75% of chat area */
+    word-wrap: break-word;          /* Break long words to fit within the message box */
+    display: inline-block;          /* Allow messages to be positioned left or right */
 }
 
 .user-message {
-    align-self: flex-end;
-    background-color: #0084ff;
-    color: white;
-    text-align: right;
+    align-self: flex-end;           /* Push user messages to the right side */
+    background-color: #0084ff;      /* Blue background color */
+    color: white;                   /* White text */
+    text-align: right;              /* Align text to the right */
 }
 
 .ai-message {
-    align-self: flex-start;
-    background-color: #333;
-    color: white;
-    text-align: left;
+    align-self: flex-start;         /* Push AI messages to the left side */
+    background-color: #333;         /* Dark gray background */
+    color: white;                   /* White text */
+    text-align: left;               /* Align text to the left */
 }
 
 input[type="text"] {
-    width: 60%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    margin-top: 10px;
-    font-size: 16px;
-    outline: none;
+    width: 60%;                     /* Make input boxes 60% of container width */
+    padding: 10px;                  /* Add 10 pixels of space inside */
+    border: none;                   /* Remove the border */
+    border-radius: 5px;             /* Round the corners by 5 pixels */
+    margin-top: 10px;               /* Add 10 pixels of space above */
+    font-size: 16px;                /* Make the text 16 pixels tall */
+    outline: none;                  /* Remove the blue outline when clicked */
 }
 
 button {
-    padding: 10px 15px;
-    background-color: #0084ff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-    transition: background-color 0.2s ease-in-out;
+    padding: 10px 15px;             /* Add space inside: 10px top/bottom, 15px left/right */
+    background-color: #0084ff;      /* Blue background */
+    color: white;                   /* White text */
+    border: none;                   /* Remove the default border */
+    border-radius: 5px;             /* Round the corners by 5 pixels */
+    cursor: pointer;                /* Show a hand cursor when hovering over button */
+    font-size: 16px;                /* Make the text 16 pixels tall */
+    margin-top: 10px;               /* Add 10 pixels of space above */
+    transition: background-color 0.2s ease-in-out;  /* Smooth color change over 0.2 seconds */
 }
 
 button:hover {
-    background-color: #006edc;
+    background-color: #006edc;      /* Change to a darker blue color */
 }
 
 footer {
-    margin-top: 20px;
+    margin-top: 20px;               /* Add 20 pixels of space above the footer */
 }
 
 footer button {
-    margin: 5px;
+    margin: 5px;                    /* Add 5 pixels of space around each footer button */
 }
